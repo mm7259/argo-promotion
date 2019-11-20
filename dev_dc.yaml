@@ -1,0 +1,99 @@
+apiVersion: v1
+items:
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: 2019-11-19T21:29:38Z
+    generation: 2
+    labels:
+      application: openjdk-app
+      template: openjdk18-web-basic-s2i
+      template.openshift.io/template-instance-owner: b0f0772c-0b13-11ea-bafe-122670964aa1
+      xpaas: 1.4.14
+    name: openjdk-app
+    namespace: dev
+    resourceVersion: "68255"
+    selfLink: /apis/apps.openshift.io/v1/namespaces/dev/deploymentconfigs/openjdk-app
+    uid: b0f5a757-0b13-11ea-bafe-122670964aa1
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      deploymentConfig: openjdk-app
+    strategy:
+      activeDeadlineSeconds: 21600
+      recreateParams:
+        timeoutSeconds: 600
+      resources: {}
+      type: Recreate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          application: openjdk-app
+          deploymentConfig: openjdk-app
+        name: openjdk-app
+      spec:
+        containers:
+        - image: docker-registry.default.svc:5000/dev/openjdk-app@sha256:203bc2637968c42da99374266c3f03723395b6e7a0dd2641d8a9c00a9483215e
+          imagePullPolicy: Always
+          name: openjdk-app
+          ports:
+          - containerPort: 8778
+            name: jolokia
+            protocol: TCP
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+          - containerPort: 8443
+            name: https
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 75
+    test: false
+    triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - openjdk-app
+        from:
+          kind: ImageStreamTag
+          name: openjdk-app:latest
+          namespace: dev
+        lastTriggeredImage: docker-registry.default.svc:5000/dev/openjdk-app@sha256:203bc2637968c42da99374266c3f03723395b6e7a0dd2641d8a9c00a9483215e
+      type: ImageChange
+    - type: ConfigChange
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: 2019-11-19T21:31:14Z
+      lastUpdateTime: 2019-11-19T21:31:14Z
+      message: replication controller "openjdk-app-1" successfully rolled out
+      reason: NewReplicationControllerAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: 2019-11-20T16:38:44Z
+      lastUpdateTime: 2019-11-20T16:38:44Z
+      message: Deployment config has minimum availability.
+      status: "True"
+      type: Available
+    details:
+      causes:
+      - type: ConfigChange
+      message: config change
+    latestVersion: 1
+    observedGeneration: 2
+    readyReplicas: 1
+    replicas: 1
+    unavailableReplicas: 0
+    updatedReplicas: 1
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""
